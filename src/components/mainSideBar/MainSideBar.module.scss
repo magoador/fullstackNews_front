@@ -1,0 +1,11 @@
+.mainSideBar {
+    background-color: rgb(255, 211, 152);
+    padding: 40px;
+    font-size: 24px;
+    .category {
+        margin-bottom: 20px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}

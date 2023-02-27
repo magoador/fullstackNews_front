@@ -1,0 +1,18 @@
+.newsHeader {
+  background-color: antiquewhite;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.newsLink {
+  flex: 1;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: 30px;
+}
+
+.newsAuthorization {
+  justify-content: flex-end;
+  cursor: pointer;
+}

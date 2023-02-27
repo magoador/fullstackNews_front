@@ -1,0 +1,35 @@
+.mainNews {
+    flex: 1;
+    background-color: rgb(122, 122, 122);
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    row-gap: 30px;
+    img {
+        border-radius: 5px 5px 0 0;
+    }
+    .news {
+        max-width: 400px;
+        background-color: brown;
+        border-radius: 5px;
+        &Info {
+            padding: 10px;
+        }
+        &Name {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        &Description {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        &Button button{
+            padding: 10px 15px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+    }
+}
