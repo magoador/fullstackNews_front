@@ -1,72 +1,52 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, Link } from "react-router-dom";
+
+import { fetchNews } from "../../redux/slices/newsSlice";
 import styles from "./MainNews.module.scss";
 
 const MainNews = () => {
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(fetchNews());
+  }, [dispatch]);
+
+  const { category } = useParams();
+
+  const news = useSelector((state) =>
+    state.news.news.filter((news) => {
+      if (!category) return true;
+
+      return news.category.name === category;
+    })
+  );
+
   return (
     <div className={styles.mainNews}>
-      <div className={styles.news}>
-        <div className={styles.newsImg}>
-          <img
-            width={400}
-            src="https://s0.rbk.ru/v6_top_pics/resized/1440xH/media/img/6/38/756693910339386.jpg"
-            alt=""
-          />
-        </div>
-        <div className={styles.newsInfo}>
-          <div className={styles.newsName}>Новость 1</div>
-          <div className={styles.newsDescription}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est
-            distinctio veritatis quo iste nulla porro cumque sunt nobis beatae,
-            similique consequuntur autem a illum, qui rem impedit sapiente
-            dolorum. Tempore?
+      {news.map((news) => {
+        return (
+          <div className={styles.news} key={news._id}>
+            <div className={styles.newsImg}>
+              <img
+                width={400}
+                height={250}
+                src={`http://localhost:4000/${news.img}`}
+                alt=""
+              />
+            </div>
+            <div className={styles.newsInfo}>
+              <div className={styles.newsName}>{news.name}</div>
+              <div
+                className={styles.newsDescription}
+              >{`${news.description.slice(0, 140)}...`}</div>
+              <div className={styles.newsButton}>
+                <Link><button>Перейти к новости</button></Link>
+              </div>
+            </div>
           </div>
-          <div className={styles.newsButton}>
-            <button>Перейти к новости</button>
-          </div>
-        </div>
-      </div>
-      <div className={styles.news}>
-        <div className={styles.newsImg}>
-          <img
-            width={400}
-            src="https://s0.rbk.ru/v6_top_pics/resized/1440xH/media/img/6/38/756693910339386.jpg"
-            alt=""
-          />
-        </div>
-        <div className={styles.newsInfo}>
-          <div className={styles.newsName}>Новость 1</div>
-          <div className={styles.newsDescription}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est
-            distinctio veritatis quo iste nulla porro cumque sunt nobis beatae,
-            similique consequuntur autem a illum, qui rem impedit sapiente
-            dolorum. Tempore?
-          </div>
-          <div className={styles.newsButton}>
-            <button>Перейти к новости</button>
-          </div>
-        </div>
-      </div>
-      <div className={styles.news}>
-        <div className={styles.newsImg}>
-          <img
-            width={400}
-            src="https://s0.rbk.ru/v6_top_pics/resized/1440xH/media/img/6/38/756693910339386.jpg"
-            alt=""
-          />
-        </div>
-        <div className={styles.newsInfo}>
-          <div className={styles.newsName}>Новость 1</div>
-          <div className={styles.newsDescription}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est
-            distinctio veritatis quo iste nulla porro cumque sunt nobis beatae,
-            similique consequuntur autem a illum, qui rem impedit sapiente
-            dolorum. Tempore?
-          </div>
-          <div className={styles.newsButton}>
-            <button>Перейти к новости</button>
-          </div>
-        </div>
-      </div>
+        );
+      })}
     </div>
   );
 };
