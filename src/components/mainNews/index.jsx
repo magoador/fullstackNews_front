@@ -39,9 +39,9 @@ const MainNews = () => {
               <div className={styles.newsName}>{news.name}</div>
               <div
                 className={styles.newsDescription}
-              >{`${news.description.slice(0, 140)}...`}</div>
+              >{news.description.slice(0, 140)}...</div>
               <div className={styles.newsButton}>
-                <Link><button>Перейти к новости</button></Link>
+                <Link to={`http://localhost:3000/currentNews/${news._id}`}><button>Перейти к новости</button></Link>
               </div>
             </div>
           </div>

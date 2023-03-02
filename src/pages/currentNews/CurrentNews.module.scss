@@ -1,0 +1,45 @@
+.currentNews {
+  text-align: center;
+  img {
+    border-radius: 5px 5px 0 0;
+  }
+  .news {
+    padding: 20px;
+    &Info {
+      padding: 10px;
+      max-width: 90%;
+      margin: 0 auto;
+      word-spacing: 1px;
+    }
+    &Name {
+      font-size: 26px;
+      margin-bottom: 15px;
+    }
+    &Description {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+  }
+  .comments {
+    span {
+      font-size: 22px;
+      font-weight: 600;
+    }
+    text-align: left;
+    margin: 0 50px;
+    .comment {
+      box-shadow: 0 0 15px 1px;
+      border-radius: 5px;
+      padding: 15px;
+      margin-top: 40px;
+      max-width: 800px;
+      &User {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+      &Text {
+        font-size: 18px;
+      }
+    }
+  }
+}

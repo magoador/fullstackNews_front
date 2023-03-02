@@ -13,6 +13,49 @@
 }
 
 .newsAuthorization {
+  position: relative;
   justify-content: flex-end;
-  cursor: pointer;
+  img {
+    cursor: pointer;
+  }
+}
+
+.loginForm {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  padding: 20px;
+  background-color: aliceblue;
+  text-align: left;
+  border-radius: 0 0 15px 15px;
+  input {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  .description {
+    margin: 15px 0 5px 0;
+    font-size: 17px;
+  }
+  .registrationButton {
+    margin: 15px 0 15px 0;
+    button {
+      padding: 10px;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  }
+  .questionText {
+    cursor: pointer;
+    width: 151px;
+    border-bottom: 1px solid;
+  }
+  .registered {
+    margin-bottom: 10px;
+  }
+  .inputEmptyError {
+    color: red;
+  }
 }
