@@ -4,7 +4,13 @@ import styles from "./Header.module.scss";
 import userLogin from "../../assets/img/userLogin.png";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../../redux/slices/usersSlice";
+import {
+  addUser,
+  clearToken,
+  loginError,
+  loginUser,
+  registrationError,
+} from "../../redux/slices/usersSlice";
 
 const NewsHeader = () => {
   const dispatch = useDispatch();
@@ -15,10 +21,8 @@ const NewsHeader = () => {
   const [lastName, setLastName] = React.useState("");
   const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [registered, setRegistered] = React.useState(false);
-  const [loginSuccess, setLoginSuccess] = React.useState(false);
 
-  const users = useSelector((state) => state.users.users);
+  const usersState = useSelector((state) => state.users);
 
   const handleOpenLogin = () => {
     setOpenLogin(!openLogin);
@@ -38,12 +42,16 @@ const NewsHeader = () => {
 
   const handleAddUser = () => {
     dispatch(addUser({ firstName, lastName, login, password }));
-    setRegistered(true);
-    formClear();
   };
 
   const handleRegistrationButtunDisabled = () => {
-    if (!firstName || !lastName || !login || !password) {
+    if (
+      !firstName ||
+      !lastName ||
+      !login ||
+      !password ||
+      usersState.registrationError
+    ) {
       return true;
     }
     return false;
@@ -57,15 +65,23 @@ const NewsHeader = () => {
   };
 
   const handleLoginButton = () => {
-    const user = users.find(
-      (user) => user.login === login && user.password === password
-    );
-    if (user) {
-      setLoginSuccess(true);
-    } else {
-      setLoginSuccess(false);
-    }
-    return user
+    dispatch(loginUser({ login, password }));
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    dispatch(clearToken());
+  };
+
+  const handleOnChangeLogin = (e) => {
+    setLogin(e.target.value);
+    dispatch(loginError(""));
+    dispatch(registrationError(""));
+  };
+
+  const handleOnChangeLogPassword = (e) => {
+    setPassword(e.target.value);
+    dispatch(loginError(""));
   };
 
   return (
@@ -76,44 +92,54 @@ const NewsHeader = () => {
       <div className={styles.newsAuthorization}>
         <img onClick={handleOpenLogin} width={30} src={userLogin} alt="" />
         {openLogin ? (
-          hasAccaunt ? (
-            loginSuccess ? (
-              <div className={styles.loginForm}>
-                <div className={styles.successText}>Добро пожаловать!</div>
-              </div>
-            ) : (
-              <div className={styles.loginForm}>
-                <div className={styles.description}>Логин</div>
-                <div className={styles.input}>
-                  <input
-                    onChange={(e) => setLogin(e.target.value)}
-                    value={login}
-                    type="text"
-                    placeholder="Введите логин..."
-                  />
+          usersState.token ? (
+            <div className={styles.loginForm}>
+              <div className={styles.logAccRow}>
+                <div className={styles.logAccColumn}>
+                  {usersState.loggedUser.firstName}
                 </div>
-                <div className={styles.description}>Пароль</div>
-                <div className={styles.input}>
-                  <input
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    type="text"
-                    placeholder="Введите пароль..."
-                  />
-                </div>
-                <div className={styles.registrationButton}>
-                  <button
-                    disabled={handleLoginButtunDisabled()}
-                    onClick={handleLoginButton}
-                  >
-                    Войти
-                  </button>
-                </div>
-                <div className={styles.questionText} onClick={handleHasAccaunt}>
-                  У меня нет аккаунта
+                <div className={styles.logAccColumn}>
+                  {usersState.loggedUser.lastName}
                 </div>
               </div>
-            )
+              {usersState.loggedUser.login}
+              <button className={styles.logoutButton} onClick={handleLogOut}>
+                Выйти из аккаунта
+              </button>
+            </div>
+          ) : hasAccaunt ? (
+            <div className={styles.loginForm}>
+              <div className={styles.description}>Логин</div>
+              <div className={styles.input}>
+                <input
+                  onChange={(e) => handleOnChangeLogin(e)}
+                  value={login}
+                  type="text"
+                  placeholder="Введите логин..."
+                />
+              </div>
+              <div className={styles.description}>Пароль</div>
+              <div className={styles.input}>
+                <input
+                  onChange={(e) => handleOnChangeLogPassword(e)}
+                  value={password}
+                  type="text"
+                  placeholder="Введите пароль..."
+                />
+              </div>
+              <div className={styles.loginError}>{usersState.loginError}</div>
+              <div className={styles.registrationButton}>
+                <button
+                  disabled={handleLoginButtunDisabled()}
+                  onClick={handleLoginButton}
+                >
+                  Войти
+                </button>
+              </div>
+              <div className={styles.questionText} onClick={handleHasAccaunt}>
+                У меня нет аккаунта
+              </div>
+            </div>
           ) : (
             <div className={styles.loginForm}>
               <div className={styles.description}>Имя</div>
@@ -147,7 +173,7 @@ const NewsHeader = () => {
               <div className={styles.description}>Логин</div>
               <div className={styles.input}>
                 <input
-                  onChange={(e) => setLogin(e.target.value)}
+                  onChange={(e) => handleOnChangeLogin(e)}
                   value={login}
                   type="text"
                   placeholder="Введите логин..."
@@ -172,6 +198,16 @@ const NewsHeader = () => {
                   </div>
                 )}
               </div>
+              {usersState.registrationError && (
+                <div className={styles.registrationError}>
+                  {usersState.registrationError}
+                </div>
+              )}
+              {usersState.signUp && (
+                <div className={styles.logSuccess}>
+                  Вы успешно зарегистрировались!
+                </div>
+              )}
               <div className={styles.registrationButton}>
                 <button
                   onClick={handleAddUser}
@@ -180,9 +216,6 @@ const NewsHeader = () => {
                   Зарегистрироваться
                 </button>
               </div>
-              {registered && (
-                <div className={styles.registered}>Вы зарегистрировались!</div>
-              )}
               <div className={styles.questionText} onClick={handleHasAccaunt}>
                 У меня есть аккаунт
               </div>

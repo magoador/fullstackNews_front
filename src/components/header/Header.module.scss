@@ -3,6 +3,7 @@
   padding: 15px;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .newsLink {
@@ -57,5 +58,30 @@
   }
   .inputEmptyError {
     color: red;
+  }
+  .loginError {
+    margin-top: 10px;
+    color: red;
+  }
+  .registrationError {
+    color: red;
+    margin-top: 10px;
+  }
+  .logSuccess {
+    color: green;
+    margin-top: 10px;
+  }
+  .logAccRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .logoutButton{
+    cursor: pointer;
+    margin-top: 20px;
+    padding: 10px;
+    width: 150px;
+    border: none;
+    border-radius: 5px;
   }
 }
