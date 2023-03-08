@@ -2,9 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import NewsHeader from "../../components/header";
 import { addComment, fetchNews } from "../../redux/slices/newsSlice";
-import { fetchUsers } from "../../redux/slices/usersSlice";
 import styles from "./CurrentNews.module.scss";
 
 const CurrentNews = () => {
@@ -12,10 +10,6 @@ const CurrentNews = () => {
 
   React.useEffect(() => {
     dispatch(fetchNews());
-  }, [dispatch]);
-
-  React.useEffect(() => {
-    dispatch(fetchUsers());
   }, [dispatch]);
 
   const { newsId } = useParams();
@@ -50,13 +44,12 @@ const CurrentNews = () => {
     setCommentText(text);
   };
 
-  if (!currentNews) {
+  if (!currentNews || !users.users.length) {
     return "Loading...";
   }
 
   return (
     <div className={styles.currentNews}>
-      <NewsHeader />
       <div className={styles.news} key={currentNews._id}>
         <div className={styles.newsImg}>
           <img

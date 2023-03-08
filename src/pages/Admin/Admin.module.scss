@@ -1,0 +1,55 @@
+.admin {
+  background-color: rgb(253, 217, 171);
+}
+
+.addNewsForm {
+  padding: 40px;
+  font-size: 18px;
+  input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 17px;
+    margin-bottom: 20px;
+  }
+  .inputDescription {
+    margin-bottom: 10px;
+  }
+  button {
+    padding: 10px 15px;
+    font-size: 17px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  textarea {
+    font-size: 17px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .newsDescription {
+    margin-bottom: 20px;
+  }
+  span {
+    margin-left: 10px;
+    opacity: 0.7;
+  }
+  .categoriesList {
+    margin-bottom: 20px;
+  }
+  .categoriesListText {
+    margin-bottom: 20px;
+    text-decoration: underline;
+    cursor: pointer;
+    max-width: 150px;
+  }
+  .categoryRow {
+    display: flex;
+    justify-content: space-between;
+    max-width: 350px;
+    margin-bottom: 10px;
+  }
+  .addNewsMessage {
+    margin-top: 15px;
+  }
+}

@@ -4,6 +4,7 @@ const initialState = {
   users: [],
   loginError: "",
   registrationError: "",
+  isAdmin: true,
   signUp: false,
   loggedUser: null,
   token: localStorage.getItem("token"),
@@ -105,6 +106,13 @@ export const usersSlice = createSlice({
             return JSON.parse(jsonPayload);
           }
           state.loggedUser = parseJwt(state.token);
+          if (state.loggedUser.login === "admin") {
+            state.isAdmin = true;
+          } else {
+            state.isAdmin = false;
+          }
+        } else {
+          state.isAdmin = false;
         }
       })
       .addCase(addUser.fulfilled, (state, action) => {
@@ -131,6 +139,11 @@ export const usersSlice = createSlice({
           return JSON.parse(jsonPayload);
         }
         state.loggedUser = parseJwt(state.token);
+        if (state.loggedUser.login === "admin") {
+          state.isAdmin = true;
+        } else {
+          state.isAdmin = false;
+        }
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginError = action.payload;

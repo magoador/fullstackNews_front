@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addUser,
   clearToken,
+  fetchUsers,
   loginError,
   loginUser,
   registrationError,
@@ -14,6 +15,10 @@ import {
 
 const NewsHeader = () => {
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(fetchUsers())
+  }, [dispatch])
 
   const [openLogin, setOpenLogin] = React.useState(false);
   const [hasAccaunt, setHasAccaunt] = React.useState(false);
