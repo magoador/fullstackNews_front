@@ -1,9 +1,21 @@
+body {
+    background-color: rgb(253, 217, 171);
+}
+
 .admin {
-  background-color: rgb(253, 217, 171);
+    padding: 40px;
+    .postNewsButton {
+        padding: 10px 15px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-bottom: 40px;
+        margin: 0 40px 40px 0;
+    }
 }
 
 .addNewsForm {
-  padding: 40px;
   font-size: 18px;
   input {
     padding: 10px;
@@ -51,5 +63,11 @@
   }
   .addNewsMessage {
     margin-top: 15px;
+  }
+  .findNewsText {
+    margin-bottom: 10px;
+  }
+  .findNews {
+    margin-bottom: 40px;
   }
 }

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   news: [],
+  currentNews: {},
   addNewsMessage: "",
   addNewsSuccess: false,
 };
@@ -68,6 +69,18 @@ export const addComment = createAsyncThunk(
   }
 );
 
+export const getNewsById = createAsyncThunk(
+  "news/getNewsById",
+  async (id, thunkAPI) => {
+    try {
+      const res = await fetch(`http://localhost:4000/news/${id}`);
+      return res.json();
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
 export const newsSlice = createSlice({
   name: "news",
   initialState,
@@ -88,12 +101,15 @@ export const newsSlice = createSlice({
       .addCase(addNews.fulfilled, (state, action) => {
         state.news.push(action.payload);
         state.addNewsMessage = "Вы успешно добавили новость!";
-        state.addNewsSuccess = true
+        state.addNewsSuccess = true;
       })
       .addCase(addNews.rejected, (state, action) => {
         state.addNewsMessage = action.payload;
-        state.addNewsSuccess = false
-      });
+        state.addNewsSuccess = false;
+      })
+      .addCase(getNewsById.fulfilled, (state, action) => {
+        state.currentNews = action.payload
+      })
   },
 });
 

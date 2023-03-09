@@ -5,10 +5,11 @@ import NewsHeader from "./components/header";
 import Admin from "./pages/Admin/Admin";
 import CurrentNews from "./pages/currentNews";
 import News from "./pages/Main/";
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
   const isAdmin = useSelector((state) => state.users.isAdmin);
-  console.log(isAdmin);  
+
   if (isAdmin) {
     return (
       <div className="App">
@@ -18,6 +19,7 @@ function App() {
           <Route path="/news/:category" element={<News />} />
           <Route path="/currentNews/:newsId" element={<CurrentNews />} />
           <Route path="/news/admin" element={<Admin />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     );
@@ -30,7 +32,8 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/news/:category" element={<News />} />
         <Route path="/currentNews/:newsId" element={<CurrentNews />} />
-        <Route path="/news/admin" element={<Navigate to='/news'/>} />
+        <Route path="/news/admin" element={<Navigate to="/news" />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

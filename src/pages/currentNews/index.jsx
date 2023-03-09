@@ -2,20 +2,20 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { addComment, fetchNews } from "../../redux/slices/newsSlice";
+import { addComment, fetchNews, getNewsById } from "../../redux/slices/newsSlice";
 import styles from "./CurrentNews.module.scss";
 
 const CurrentNews = () => {
   const dispatch = useDispatch();
 
+  const { newsId } = useParams()
+
   React.useEffect(() => {
     dispatch(fetchNews());
+    dispatch(getNewsById(newsId))
   }, [dispatch]);
 
-  const { newsId } = useParams();
-  const currentNews = useSelector((state) => state.news.news).find(
-    (news) => news._id === newsId
-  );
+  const currentNews = useSelector((state) => state.news.currentNews);
 
   const users = useSelector((state) => state.users);
 
@@ -50,7 +50,7 @@ const CurrentNews = () => {
 
   return (
     <div className={styles.currentNews}>
-      <div className={styles.news} key={currentNews._id}>
+      <div className={styles.news}>
         <div className={styles.newsImg}>
           <img
             width={800}
@@ -65,7 +65,7 @@ const CurrentNews = () => {
           </div>
         </div>
       </div>
-      {currentNews.comments.length ? (
+      {currentNews.comments?.length ? (
         users.token ? (
           <div className={styles.comments}>
             <span>Комментарии:</span>
