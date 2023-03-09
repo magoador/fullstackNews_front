@@ -21,7 +21,7 @@ const Admin = () => {
   const [description, setDescription] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [idForFindNews, setIdForFindNews] = React.useState("");
-  const [action, setAction] = React.useState("");
+  const [action, setAction] = React.useState("POST");
 
   React.useEffect(() => {
     dispatch(fetchCategories());

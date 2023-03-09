@@ -17,8 +17,20 @@ const NewsHeader = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(fetchUsers())
-  }, [dispatch])
+    dispatch(fetchUsers());
+
+    const handleClickOutside = (event) => {
+      if (!event.composedPath().includes(logRef.current)) {
+        setOpenLogin(false);
+      }
+    };
+
+    document.body.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.body.removeEventListener("click", handleClickOutside);
+    };
+  }, [dispatch]);
 
   const [openLogin, setOpenLogin] = React.useState(false);
   const [hasAccaunt, setHasAccaunt] = React.useState(false);
@@ -28,6 +40,8 @@ const NewsHeader = () => {
   const [password, setPassword] = React.useState("");
 
   const usersState = useSelector((state) => state.users);
+
+  const logRef = React.useRef();
 
   const handleOpenLogin = () => {
     setOpenLogin(!openLogin);
@@ -94,7 +108,7 @@ const NewsHeader = () => {
       <div className={styles.newsLink}>
         <Link to="http://localhost:3000/news">Новости</Link>
       </div>
-      <div className={styles.newsAuthorization}>
+      <div className={styles.newsAuthorization} ref={logRef}>
         <img onClick={handleOpenLogin} width={30} src={userLogin} alt="" />
         {openLogin ? (
           usersState.token ? (
