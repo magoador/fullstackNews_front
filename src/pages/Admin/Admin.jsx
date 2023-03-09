@@ -1,7 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../../redux/slices/categoriesSlice";
-import { addNews, fetchNews } from "../../redux/slices/newsSlice";
+import {
+  addNews,
+  deleteNewsById,
+  fetchNews,
+  getNewsById,
+  patchNewsById,
+} from "../../redux/slices/newsSlice";
 
 import styles from "./Admin.module.scss";
 
@@ -14,8 +20,8 @@ const Admin = () => {
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [category, setCategory] = React.useState("");
-  const [postNews, setPostNews] = React.useState(false);
-  const [changeNews, setChangeNews] = React.useState(false);
+  const [idForFindNews, setIdForFindNews] = React.useState("");
+  const [action, setAction] = React.useState("");
 
   React.useEffect(() => {
     dispatch(fetchCategories());
@@ -42,25 +48,61 @@ const Admin = () => {
     formClear();
   };
 
-  const handlePostNews = () => {
-    setPostNews(!postNews);
-    setChangeNews(false);
+  const handlePatchNews = () => {
+    dispatch(patchNewsById({ id: newsId, img, name, description, category }));
+    formClear();
+    setIdForFindNews("");
   };
 
-  const handleChangeNews = () => {
-    setChangeNews(!changeNews);
-    setPostNews(false);
+  const handleFindNews = () => {
+    dispatch(getNewsById(idForFindNews));
+    if (newsState.currentNews) {
+      setNewsId(newsState.currentNews._id);
+      setImg(newsState.currentNews.img);
+      setName(newsState.currentNews.name);
+      setDescription(newsState.currentNews.description);
+      setCategory(newsState.currentNews.category);
+    }
   };
+
+  const handleDeleteNews = () => {
+    dispatch(deleteNewsById(idForFindNews));
+    setIdForFindNews("");
+  };
+
+  const handleChangeAction = (newAction) => {
+    setAction(newAction);
+    setIdForFindNews("");
+  };
+
+  const handleDisabledButton = () => {
+    if (!img || !name || !description || !category) {
+        return true
+    }
+    return false
+  }
 
   return (
     <div className={styles.admin}>
-      <button onClick={handlePostNews} className={styles.postNewsButton}>
+      <button
+        onClick={() => handleChangeAction("POST")}
+        className={styles.postNewsButton}
+      >
         Добавить новость
       </button>
-      <button onClick={handleChangeNews} className={styles.postNewsButton}>
+      <button
+        onClick={() => handleChangeAction("PATCH")}
+        className={styles.postNewsButton}
+      >
         Изменить новость
       </button>
-      {postNews && (
+      <button
+        onClick={() => handleChangeAction("DELETE")}
+        className={styles.postNewsButton}
+      >
+        Удалить новость
+      </button>
+      {action === "POST" && (
         <div className={styles.addNewsForm}>
           <div className={styles.newsImg}>
             <div className={styles.inputDescription}>Путь к изображению</div>
@@ -121,7 +163,7 @@ const Admin = () => {
                 })}
             </div>
           </div>
-          <button onClick={handleAddNews}>Добавить новость</button>
+          <button onClick={handleAddNews} disabled={handleDisabledButton()}>Добавить новость</button>
           {newsState.addNewsMessage && (
             <div className={styles.addNewsMessage}>
               {newsState.addNewsMessage}
@@ -134,23 +176,25 @@ const Admin = () => {
           )}
         </div>
       )}
-      {changeNews && (
+      {action === "PATCH" && (
         <div className={styles.addNewsForm}>
-            <div className={styles.findNewsText}>Для начала найдите новость которую хотите изменить.</div>
-            <div className={styles.findNews}>
-                <div className={styles.inputDescription}>Введите id новости, которую хотите найти</div>
-                <input type="text" placeholder="Введите id новости" />
-                <div className={styles.findNewsButton}><button>Найти новость</button></div>
+          <div className={styles.findNewsText}>
+            Для начала найдите новость которую хотите изменить.
+          </div>
+          <div className={styles.findNews}>
+            <div className={styles.inputDescription}>
+              Введите id новости, которую хотите найти
             </div>
-          <div className={styles.newsId}>
-            <div className={styles.inputDescription}>Id новости</div>
             <input
               type="text"
               placeholder="Введите id новости"
-              value={newsId}
-              onChange={(e) => setNewsId(e.target.value)}
+              value={idForFindNews}
+              onChange={(e) => setIdForFindNews(e.target.value)}
             />
             <span>6408914430146b5188358684</span>
+            <div className={styles.findNewsButton}>
+              <button onClick={handleFindNews} disabled={!idForFindNews}>Найти новость</button>
+            </div>
           </div>
           <div className={styles.newsImg}>
             <div className={styles.inputDescription}>Путь к изображению</div>
@@ -211,17 +255,28 @@ const Admin = () => {
                 })}
             </div>
           </div>
-          <button onClick={handleAddNews}>Изменить новость</button>
-          {newsState.addNewsMessage && (
-            <div className={styles.addNewsMessage}>
-              {newsState.addNewsMessage}
+          <button onClick={handlePatchNews} disabled={handleDisabledButton()}>
+            Изменить новость
+          </button>
+        </div>
+      )}
+      {action === "DELETE" && (
+        <div className={styles.addNewsForm}>
+          <div className={styles.findNews} style={{ marginBottom: 10 }}>
+            <div className={styles.inputDescription}>
+              Введите id новости, которую хотите удалить
             </div>
-          )}
-          {newsState.addNewsSuccess && (
-            <div className={styles.addNewsMessage}>
-              {newsState.addNewsSuccess}
-            </div>
-          )}
+            <input
+              type="text"
+              placeholder="Введите id новости"
+              value={idForFindNews}
+              onChange={(e) => setIdForFindNews(e.target.value)}
+            />
+            <span>6408914430146b5188358684</span>
+          </div>
+          <button onClick={handleDeleteNews} disabled={!idForFindNews}>
+            Удалить новость
+          </button>
         </div>
       )}
     </div>

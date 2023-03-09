@@ -10,7 +10,7 @@ const initialState = {
 export const fetchNews = createAsyncThunk("news/fetch", async (_, thunkAPI) => {
   try {
     const res = await fetch("http://localhost:4000/news");
-    return await res.json();
+    return res.json();
   } catch (err) {
     return thunkAPI.rejectWithValue(err);
   }
@@ -81,6 +81,41 @@ export const getNewsById = createAsyncThunk(
   }
 );
 
+export const patchNewsById = createAsyncThunk(
+  "news/patchNewsById",
+  async ({ id, img, name, description, category }, thunkAPI) => {
+    try {
+      const res = await fetch(`http://localhost:4000/news/update/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          img,
+          name,
+          description,
+          category,
+        }),
+      });
+      return res.json();
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
+export const deleteNewsById = createAsyncThunk(
+  "news/deleteNewsById",
+  async (id, thunkAPI) => {
+    try {
+      const res = await fetch(`http://localhost:4000/news/delete/${id}`, {
+        method: "DELETE",
+      });
+      return res.json();
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
 export const newsSlice = createSlice({
   name: "news",
   initialState,
@@ -108,8 +143,19 @@ export const newsSlice = createSlice({
         state.addNewsSuccess = false;
       })
       .addCase(getNewsById.fulfilled, (state, action) => {
-        state.currentNews = action.payload
+        state.currentNews = action.payload;
       })
+      .addCase(patchNewsById.fulfilled, (state, action) => {
+        state.news.map((news) => {
+          if (news._id === action.payload._id) {
+            news = action.payload;
+          }
+          return news;
+        });
+      })
+      .addCase(deleteNewsById.fulfilled, (state, action) => {
+        state.news = state.news.filter((news) => news._id !== action.payload._id)
+      });
   },
 });
 
