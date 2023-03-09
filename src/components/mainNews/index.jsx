@@ -24,29 +24,33 @@ const MainNews = () => {
 
   return (
     <div className={styles.mainNews}>
-      {news.map((news) => {
-        return (
-          <div className={styles.news} key={news._id}>
-            <div className={styles.newsImg}>
-              <img
-                width={400}
-                height={250}
-                src={`http://localhost:4000/${news.img}`}
-                alt=""
-              />
-            </div>
-            <div className={styles.newsInfo}>
-              <div className={styles.newsName}>{news.name}</div>
-              <div
-                className={styles.newsDescription}
-              >{news.description.slice(0, 120)}...</div>
-              <div className={styles.newsButton}>
-                <Link to={`http://localhost:3000/currentNews/${news._id}`}><button>Перейти к новости</button></Link>
+      <div className={styles.allNews}>
+        {news.map((news) => {
+          return (
+            <div className={styles.news} key={news._id}>
+              <div className={styles.newsImg}>
+                <img
+                  width={400}
+                  height={250}
+                  src={`http://localhost:4000/${news.img}`}
+                  alt=""
+                />
+              </div>
+              <div className={styles.newsInfo}>
+                <div className={styles.newsName}>{news.name}</div>
+                <div className={styles.newsDescription}>
+                  {news.description.slice(0, 120)}...
+                </div>
+                <div className={styles.newsButton}>
+                  <Link to={`http://localhost:3000/currentNews/${news._id}`}>
+                    <button>Перейти к новости</button>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };

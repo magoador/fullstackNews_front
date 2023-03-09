@@ -125,13 +125,8 @@ export const newsSlice = createSlice({
       .addCase(fetchNews.fulfilled, (state, action) => {
         state.news = action.payload;
       })
-      .addCase(addComment.fulfilled, (state, action) => {
-        state.news.map((news) => {
-          if (news._id === action.payload._id) {
-            news = action.payload;
-          }
-          return news;
-        });
+      .addCase(addComment.fulfilled, (state, action) => {        
+        state.currentNews = action.payload
       })
       .addCase(addNews.fulfilled, (state, action) => {
         state.news.push(action.payload);

@@ -9,13 +9,13 @@ const CurrentNews = () => {
   const dispatch = useDispatch();
 
   const { newsId } = useParams()
+  const currentNews = useSelector((state) => state.news.currentNews);
 
   React.useEffect(() => {
     dispatch(fetchNews());
     dispatch(getNewsById(newsId))
   }, [dispatch]);
 
-  const currentNews = useSelector((state) => state.news.currentNews);
 
   const users = useSelector((state) => state.users);
 

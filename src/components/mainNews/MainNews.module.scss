@@ -1,42 +1,44 @@
 .mainNews {
-    flex: 1;
-    background-color: rgb(122, 122, 122);
-    padding: 40px;
+  flex: 1;
+  background-color: rgb(122, 122, 122);
+  padding: 40px;
+  .allNews {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     row-gap: 30px;
-    img {
-        border-radius: 5px 5px 0 0;
+  }
+  img {
+    border-radius: 5px 5px 0 0;
+  }
+  .news {
+    max-width: 400px;
+    background-color: brown;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    &Info {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
-    .news {
-        max-width: 400px;
-        background-color: brown;
-        border-radius: 5px;
-        display: flex;
-        flex-direction: column;
-        &Info {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        &Name {
-            font-size: 24px;
-            margin-bottom: 15px;
-            height: 80px;
-        }
-        &Description {
-            font-size: 22px;
-            margin-bottom: 15px;
-            flex: 1;
-        }
-        &Button button{
-            padding: 10px 15px;
-            font-size: 18px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-        }
+    &Name {
+      font-size: 24px;
+      margin-bottom: 15px;
+      height: 80px;
     }
+    &Description {
+      font-size: 22px;
+      margin-bottom: 15px;
+      flex: 1;
+    }
+    &Button button {
+      padding: 10px 15px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+  }
 }
