@@ -6,11 +6,11 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addUser,
-  clearToken,
   fetchUsers,
-  loginError,
   loginUser,
-  registrationError,
+  logout,
+  setLoginError,
+  setRegistrationError,
 } from "../../redux/slices/usersSlice";
 
 const NewsHeader = () => {
@@ -88,19 +88,19 @@ const NewsHeader = () => {
   };
 
   const handleLogOut = () => {
-    localStorage.removeItem("token");
-    dispatch(clearToken());
+    dispatch(logout());
+    formClear()
   };
 
   const handleOnChangeLogin = (e) => {
     setLogin(e.target.value);
-    dispatch(loginError(""));
-    dispatch(registrationError(""));
+    dispatch(setLoginError(""));
+    dispatch(setRegistrationError(""));
   };
 
   const handleOnChangeLogPassword = (e) => {
     setPassword(e.target.value);
-    dispatch(loginError(""));
+    dispatch(setLoginError(""));
   };
 
   return (

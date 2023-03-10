@@ -1,6 +1,6 @@
 import React from "react";
-import MainNews from "../../components/mainNews";
-import MainSideBar from "../../components/mainSideBar";
+import MainNews from "../../components/MainNews";
+import MainSideBar from "../../components/MainSideBar";
 
 const News = () => {
   return (

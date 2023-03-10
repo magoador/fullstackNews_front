@@ -10,6 +10,20 @@ const initialState = {
   token: localStorage.getItem("token"),
 };
 
+function parseJwt(token) {
+  let base64Url = token.split(".")[1];
+  let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  let jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
 export const fetchUsers = createAsyncThunk(
   "users/fetch",
   async (_, thunkAPI) => {
@@ -73,38 +87,33 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk("logout", async (_, thunkAPI) => {
+  localStorage.removeItem("token");
+});
+
+export const setRegistrationError = createAsyncThunk(
+  "registrationError",
+  async (text, thunkAPI) => {
+    return text;
+  }
+);
+
+export const setLoginError = createAsyncThunk(
+  "loginError",
+  async (text, thunkAPI) => {
+    return text;
+  }
+);
+
 export const usersSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {
-    registrationError: (state, action) => {
-      state.registrationError = action.payload;
-    },
-    loginError: (state, action) => {
-      state.loginError = action.payload;
-    },
-    clearToken: (state) => {
-      state.token = "";
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.users = action.payload;
         if (state.token) {
-          function parseJwt(token) {
-            let base64Url = token.split(".")[1];
-            let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-            let jsonPayload = decodeURIComponent(
-              atob(base64)
-                .split("")
-                .map(function (c) {
-                  return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-                })
-                .join("")
-            );
-            return JSON.parse(jsonPayload);
-          }
           state.loggedUser = parseJwt(state.token);
           if (state.loggedUser.login === "admin") {
             state.isAdmin = true;
@@ -125,19 +134,6 @@ export const usersSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.token = action.payload;
-        function parseJwt(token) {
-          let base64Url = token.split(".")[1];
-          let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-          let jsonPayload = decodeURIComponent(
-            atob(base64)
-              .split("")
-              .map(function (c) {
-                return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-              })
-              .join("")
-          );
-          return JSON.parse(jsonPayload);
-        }
         state.loggedUser = parseJwt(state.token);
         if (state.loggedUser.login === "admin") {
           state.isAdmin = true;
@@ -147,10 +143,17 @@ export const usersSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginError = action.payload;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.token = "";
+      })
+      .addCase(setRegistrationError.fulfilled, (state, action) => {
+        state.registrationError = action.payload;
+      })
+      .addCase(setLoginError.fulfilled, (state, action) => {
+        state.loginError = action.payload;
       });
   },
 });
-
-export const { registrationError, clearToken, loginError } = usersSlice.actions;
 
 export default usersSlice.reducer;

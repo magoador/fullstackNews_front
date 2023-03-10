@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
-import NewsHeader from "./components/header";
+import NewsHeader from "./components/Header";
 import Admin from "./pages/Admin/Admin";
-import CurrentNews from "./pages/currentNews";
+import CurrentNews from "./pages/CurrentNews";
 import News from "./pages/Main/";
 import NotFound from "./pages/NotFound/NotFound";
 
